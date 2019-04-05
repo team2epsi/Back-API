@@ -43,5 +43,8 @@ namespace Loclandes
             app.UseHttpsRedirection();
             app.UseMvc();
         }
+
+
+
     }
 }
