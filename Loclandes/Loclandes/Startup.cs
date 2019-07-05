@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Loclandes.data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,8 @@ namespace Loclandes
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<IMiniExcursionDal>(f => new MiniExcursionDal(@"Persist Security Info = False; Integrated Security = true; Initial Catalog = DBLoclandes; server = (LocalDB)\MSSQLLocalDB"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
