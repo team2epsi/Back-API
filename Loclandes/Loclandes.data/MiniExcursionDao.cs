@@ -6,9 +6,9 @@ namespace Loclandes.data
 {
     public class MiniExcursionDao
     {
-        public int id { get; set; }
-        public string libelle { get; set; }
-        public int nbPlace { get; set; }
+        public int idMiniExcursion { get; set; }
+        public string libelleMiniExcursion { get; set; }
+        public int nombrePlaceMiniExcursion { get; set; }
         
     }
 }
