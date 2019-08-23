@@ -28,9 +28,9 @@ namespace Loclandes.Controllers
 
         // GET: api/MiniExcursion/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
+        public IEnumerable<MiniExcursionDao> Get(int id)
+        {                        
+            return miniExcursionDal.GetMiniExcursionById(id);
         }
 
         // POST: api/MiniExcursion

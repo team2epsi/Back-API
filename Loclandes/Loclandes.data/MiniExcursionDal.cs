@@ -22,6 +22,19 @@ namespace Loclandes.data
             {
                 miniExcursionDao = connection.Query<MiniExcursionDao>("SELECT * FROM MiniExcursions");
             }
+
+            return miniExcursionDao;
+        }
+
+        public IEnumerable<MiniExcursionDao> GetMiniExcursionById(int id)
+        {
+            IEnumerable<MiniExcursionDao> miniExcursionDao = null;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var miniExcusrionId = id;
+                miniExcursionDao = connection.Query<MiniExcursionDao>("SELECT* FROM MiniExcursions where idMiniExcursion=" + miniExcusrionId);
+            }
+
             return miniExcursionDao;
         }
     }

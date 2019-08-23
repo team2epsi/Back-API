@@ -7,5 +7,7 @@ namespace Loclandes.data
     public interface IMiniExcursionDal
     {
         IEnumerable<MiniExcursionDao> Get();
+
+        IEnumerable<MiniExcursionDao> GetMiniExcursionById(int id);
     }
 }
