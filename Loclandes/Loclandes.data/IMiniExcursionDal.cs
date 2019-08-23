@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Loclandes.data
 {
     public interface IMiniExcursionDal
     {
-        IEnumerable<MiniExcursionDao> Get();
+        IEnumerable<MiniExcursionDao> GetAllMiniExcursions();
 
         IEnumerable<MiniExcursionDao> GetMiniExcursionById(int id);
+
+        void AddMiniExcursion(MiniExcursionDao mini);
+
+        void DeleteMiniExcursion(int idMini);
     }
 }

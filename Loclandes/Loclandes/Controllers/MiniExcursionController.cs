@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+
 using Loclandes.data;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loclandes.Controllers
@@ -21,9 +21,9 @@ namespace Loclandes.Controllers
 
         // GET: api/MiniExcursion
         [HttpGet]
-        public ActionResult<IEnumerable<MiniExcursionDao>> Get()
+        public ActionResult<IEnumerable<MiniExcursionDao>> GetAllMiniExcursions()
         {
-            return Ok(miniExcursionDal.Get());
+            return Ok(miniExcursionDal.GetAllMiniExcursions());
         }
 
         // GET: api/MiniExcursion/5
@@ -33,11 +33,16 @@ namespace Loclandes.Controllers
             return Ok(miniExcursionDal.GetMiniExcursionById(id));
         }
 
-
         // POST: api/MiniExcursion
         [HttpPost]
-        public void Post([FromBody] string value)
+        public HttpResponseMessage Post([FromBody] MiniExcursionDao mini)
         {
+            if (ModelState.IsValid)
+            { miniExcursionDal.AddMiniExcursion(mini); return new HttpResponseMessage(HttpStatusCode.OK); }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
         }
 
         // PUT: api/MiniExcursion/5
@@ -50,6 +55,7 @@ namespace Loclandes.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            miniExcursionDal.DeleteMiniExcursion(id);
         }
     }
 }
