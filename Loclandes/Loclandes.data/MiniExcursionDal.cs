@@ -59,11 +59,13 @@ namespace Loclandes.data
             }
         }
 
-        public void UpdateMiniExcursion(MiniExcursionDao MiniExcursion)
+        public int UpdateMiniExcursion(MiniExcursionDao MiniExcursion)
         {
+            int affectedRows = 0;
+
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Execute(
+                 affectedRows= connection.Execute(
                     StoredProcedures.Update,
                     new
                     {
@@ -73,17 +75,23 @@ namespace Loclandes.data
                     },
                     commandType: System.Data.CommandType.StoredProcedure);
             }
+
+            return affectedRows;
         }
 
-        public void DeleteMiniExcursion(int id)
+        public int DeleteMiniExcursion(int id)
         {
+            int affectedRows = 0;
+
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Execute(
+                affectedRows = connection.Execute(
                     StoredProcedures.Delete,
                     new { @idMiniExcursion = id },
                     commandType: CommandType.StoredProcedure);
             }
+
+            return affectedRows;
         }
 
         private static class StoredProcedures

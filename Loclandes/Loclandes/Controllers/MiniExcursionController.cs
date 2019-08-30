@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Loclandes.data;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +31,16 @@ namespace Loclandes.Controllers
         [HttpGet("{id}", Name = "Get")]
         public ActionResult<MiniExcursionDao> Get(int id)
         {
-            return Ok(miniExcursionDal.GetExcursionById(id));
+            var miniExcursion = miniExcursionDal.GetExcursionById(id);
+            if (miniExcursion != null)
+            {
+                return Ok(miniExcursionDal.GetExcursionById(id));
+            }
+            else
+            {
+                var response = $"MiniExcursion id {id} not found.";
+                return NotFound(response);
+            };
         }
 
         // POST: api/MiniExcursion
@@ -42,16 +52,35 @@ namespace Loclandes.Controllers
 
         // PUT: api/MiniExcursion/5
         [HttpPut("{id}")]
-        public void Put(MiniExcursionDao miniExcursion)
+        public ActionResult Put(int id, MiniExcursionDao miniExcursion)
         {
-            miniExcursionDal.UpdateMiniExcursion(miniExcursion);
+            var affectedRows = miniExcursionDal.UpdateMiniExcursion(miniExcursion);
+            if (affectedRows > 0 && id == miniExcursion.idMiniExcursion)
+            {
+
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest("MiniExcursion has not been updated.");
+            };
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
-            miniExcursionDal.DeleteMiniExcursion(id);
+            var affectedRows = miniExcursionDal.DeleteMiniExcursion(id);
+
+            if (affectedRows > 0)
+            {
+
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest("MiniExcursion has not been deleted.");
+            };
         }
     }
 }

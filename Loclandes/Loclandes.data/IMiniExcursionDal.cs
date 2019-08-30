@@ -12,8 +12,8 @@ namespace Loclandes.data
 
         void InsertMiniExcursion(MiniExcursionDao miniExcursion);
 
-        void UpdateMiniExcursion(MiniExcursionDao miniExcursion);
+        int UpdateMiniExcursion(MiniExcursionDao miniExcursion);
 
-        void DeleteMiniExcursion(int idMini);
+        int DeleteMiniExcursion(int idMini);
     }
 }
