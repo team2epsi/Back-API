@@ -45,7 +45,7 @@ namespace Loclandes.Controllers
 
         // POST: api/MiniExcursion
         [HttpPost]
-        public void Post(MiniExcursionDao miniExcursion) //ActionResult ?
+        public void Post(MiniExcursionDao miniExcursion)
         {
             miniExcursionDal.InsertMiniExcursion(miniExcursion);
         }
