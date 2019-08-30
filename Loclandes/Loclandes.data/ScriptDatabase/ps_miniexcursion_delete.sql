@@ -1,3 +1,4 @@
+IF OBJECT_ID('ps_miniexcursion_delete', 'P') IS NOT NULL
 DROP PROC ps_miniexcursion_delete
 GO
 
@@ -9,10 +10,3 @@ AS
 BEGIN
 DELETE FROM MiniExcursions WHERE idMiniExcursion = @idMiniExcursion;
 END
-
-
-
-
-
-
-
