@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Dapper;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-
-using Dapper;
 
 namespace Loclandes.data
 {
@@ -16,57 +15,92 @@ namespace Loclandes.data
             connectionString = _connectionString;
         }
 
-        public IEnumerable<MiniExcursionDao> GetAllMiniExcursions()
+        public IEnumerable<MiniExcursionDao> GetAllExcursions()
         {
             IEnumerable<MiniExcursionDao> miniExcursionDao = null;
+
             using (var connection = new SqlConnection(connectionString))
             {
-                miniExcursionDao = connection.Query<MiniExcursionDao>("SELECT * FROM MiniExcursions");
+                miniExcursionDao = connection.Query<MiniExcursionDao>(
+                    StoredProcedures.SelectAll,
+                    commandType: CommandType.StoredProcedure);
             }
 
             return miniExcursionDao;
         }
 
-        public IEnumerable<MiniExcursionDao> GetMiniExcursionById(int id)
+        public MiniExcursionDao GetExcursionById(int id)
         {
-            IEnumerable<MiniExcursionDao> miniExcursionDao = null;
+            MiniExcursionDao miniExcursionDao = null;
+
             using (var connection = new SqlConnection(connectionString))
             {
-                var miniExcusrionId = id;
-                miniExcursionDao = connection.Query<MiniExcursionDao>("SELECT* FROM MiniExcursions where idMiniExcursion=" + miniExcusrionId);
+                miniExcursionDao = connection.QueryFirstOrDefault<MiniExcursionDao>(
+                    StoredProcedures.SelectById,
+                    new { idMiniExcursion = id },
+                    commandType: CommandType.StoredProcedure);
             }
 
             return miniExcursionDao;
         }
 
-        public void AddMiniExcursion(MiniExcursionDao mini)
+        public void InsertMiniExcursion(MiniExcursionDao MiniExcursion)
         {
-            // Version simple
-            //using (var connection = new SqlConnection(connectionString))
-            //{
-            //    string sQuery = "INSERT INTO MiniExcursions (libelleMiniExcursion, nombrePlaceMiniExcursion)" + "VALUES(@libelleMiniExcursion, @nombrePlaceMiniExcursion)";
-            //    connection.Open();
-            //    connection.Execute(sQuery, mini);
-            //}
-                
-            // Version avec PS
             using (var connection = new SqlConnection(connectionString))
             {
-                string ps_miniexcursion_insert = "ps_miniexcursion_insert";
-
-                connection.Execute(ps_miniexcursion_insert, new { @libelleMiniExcursion  = mini.LibelleMiniExcursion, @nombrePlaceMiniExcursion = mini.NombrePlaceMiniExcursion }, commandType: CommandType.StoredProcedure);
+                connection.Execute(
+                    StoredProcedures.Insert,
+                    new
+                    {
+                        MiniExcursion.libelleMiniExcursion,
+                        MiniExcursion.nombrePlaceMiniExcursion
+                    },
+                    commandType: CommandType.StoredProcedure);
             }
         }
 
-        public void DeleteMiniExcursion(int id)
+        public int UpdateMiniExcursion(MiniExcursionDao MiniExcursion)
         {
+            int affectedRows = 0;
+
             using (var connection = new SqlConnection(connectionString))
             {
-                // connection.Open();
-                string ps_miniexcursion_insert = "ps_miniexcursion_delete";
-
-                connection.Execute(ps_miniexcursion_insert, new { @idMiniExcursion = id }, commandType: CommandType.StoredProcedure);
+                 affectedRows= connection.Execute(
+                    StoredProcedures.Update,
+                    new
+                    {
+                        MiniExcursion.idMiniExcursion,
+                        MiniExcursion.libelleMiniExcursion,
+                        MiniExcursion.nombrePlaceMiniExcursion
+                    },
+                    commandType: System.Data.CommandType.StoredProcedure);
             }
+
+            return affectedRows;
+        }
+
+        public int DeleteMiniExcursion(int id)
+        {
+            int affectedRows = 0;
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                affectedRows = connection.Execute(
+                    StoredProcedures.Delete,
+                    new { @idMiniExcursion = id },
+                    commandType: CommandType.StoredProcedure);
+            }
+
+            return affectedRows;
+        }
+
+        private static class StoredProcedures
+        {
+            internal const string SelectAll = "ps_miniexcursions_select_all";
+            internal const string SelectById = "ps_miniexcursion_select_by_id";
+            internal const string Insert = "ps_miniexcursion_insert";
+            internal const string Update = "ps_miniexcursion_update";
+            internal const string Delete = "ps_miniexcursion_delete";
         }
     }
 }

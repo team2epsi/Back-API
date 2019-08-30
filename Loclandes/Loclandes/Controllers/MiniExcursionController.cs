@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
-using System.Net.Http;
-
+using System.Threading.Tasks;
 using Loclandes.data;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loclandes.Controllers
@@ -21,41 +22,65 @@ namespace Loclandes.Controllers
 
         // GET: api/MiniExcursion
         [HttpGet]
-        public ActionResult<IEnumerable<MiniExcursionDao>> GetAllMiniExcursions()
+        public ActionResult<IEnumerable<MiniExcursionDao>> Get()
         {
-            return Ok(miniExcursionDal.GetAllMiniExcursions());
+            return Ok(miniExcursionDal.GetAllExcursions());
         }
 
         // GET: api/MiniExcursion/5
         [HttpGet("{id}", Name = "Get")]
-        public ActionResult<IEnumerable<MiniExcursionDao>> GetMiniExcursionById(int id)
+        public ActionResult<MiniExcursionDao> Get(int id)
         {
-            return Ok(miniExcursionDal.GetMiniExcursionById(id));
+            var miniExcursion = miniExcursionDal.GetExcursionById(id);
+            if (miniExcursion != null)
+            {
+                return Ok(miniExcursionDal.GetExcursionById(id));
+            }
+            else
+            {
+                var response = $"MiniExcursion id {id} not found.";
+                return NotFound(response);
+            };
         }
 
         // POST: api/MiniExcursion
         [HttpPost]
-        public HttpResponseMessage Post([FromBody] MiniExcursionDao mini)
+        public void Post(MiniExcursionDao miniExcursion) //ActionResult ?
         {
-            if (ModelState.IsValid)
-            { miniExcursionDal.AddMiniExcursion(mini); return new HttpResponseMessage(HttpStatusCode.OK); }
-            else
-            {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
+            miniExcursionDal.InsertMiniExcursion(miniExcursion);
         }
 
         // PUT: api/MiniExcursion/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(int id, MiniExcursionDao miniExcursion)
         {
+            var affectedRows = miniExcursionDal.UpdateMiniExcursion(miniExcursion);
+            if (affectedRows > 0 && id == miniExcursion.idMiniExcursion)
+            {
+
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest("MiniExcursion has not been updated.");
+            };
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
-            miniExcursionDal.DeleteMiniExcursion(id);
+            var affectedRows = miniExcursionDal.DeleteMiniExcursion(id);
+
+            if (affectedRows > 0)
+            {
+
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest("MiniExcursion has not been deleted.");
+            };
         }
     }
 }
