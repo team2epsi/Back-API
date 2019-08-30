@@ -52,8 +52,8 @@ namespace Loclandes.data
                     StoredProcedures.Insert,
                     new
                     {
-                        MiniExcursion.libelleMiniExcursion,
-                        MiniExcursion.nombrePlaceMiniExcursion
+                        MiniExcursion.LibelleMiniExcursion,
+                        MiniExcursion.NombrePlaceMiniExcursion
                     },
                     commandType: CommandType.StoredProcedure);
             }
@@ -69,9 +69,9 @@ namespace Loclandes.data
                     StoredProcedures.Update,
                     new
                     {
-                        MiniExcursion.idMiniExcursion,
-                        MiniExcursion.libelleMiniExcursion,
-                        MiniExcursion.nombrePlaceMiniExcursion
+                        MiniExcursion.IdMiniExcursion,
+                        MiniExcursion.LibelleMiniExcursion,
+                        MiniExcursion.NombrePlaceMiniExcursion
                     },
                     commandType: System.Data.CommandType.StoredProcedure);
             }

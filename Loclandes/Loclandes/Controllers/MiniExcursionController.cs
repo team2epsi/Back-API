@@ -55,7 +55,7 @@ namespace Loclandes.Controllers
         public ActionResult Put(int id, MiniExcursionDao miniExcursion)
         {
             var affectedRows = miniExcursionDal.UpdateMiniExcursion(miniExcursion);
-            if (affectedRows > 0 && id == miniExcursion.idMiniExcursion)
+            if (affectedRows > 0 && id == miniExcursion.IdMiniExcursion)
             {
 
                 return NoContent();
