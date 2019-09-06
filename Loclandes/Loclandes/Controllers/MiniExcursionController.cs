@@ -72,17 +72,18 @@ namespace Loclandes.Controllers
 
         // PUT: api/MiniExcursion/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, MiniExcursionDao miniExcursion)
+        public HttpResponseMessage Put(int id, [FromBody]MiniExcursionDao miniExcursion)
+        //public ActionResult Put(int id, MiniExcursionDao miniExcursion)
         {
             var affectedRows = miniExcursionDal.UpdateMiniExcursion(miniExcursion);
             if (affectedRows > 0 && id == miniExcursion.IdMiniExcursion)
             {
 
-                return NoContent();
+                return new HttpResponseMessage(HttpStatusCode.OK);
             }
             else
             {
-                return BadRequest("MiniExcursion has not been updated.");
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
             };
         }
 
