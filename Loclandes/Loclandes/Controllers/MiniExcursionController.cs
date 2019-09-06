@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Loclandes.data;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,11 +45,29 @@ namespace Loclandes.Controllers
             };
         }
 
-        // POST: api/MiniExcursion
+        //POST: api/MiniExcursion
+        //[HttpPost]
+        // public void Post(MiniExcursionDao miniExcursion) //ActionResult ?
+        // {
+        //     miniExcursionDal.InsertMiniExcursion(miniExcursion);
+        // }
+
+        [EnableCors("AllowAllHeaders")]
         [HttpPost]
-        public void Post(MiniExcursionDao miniExcursion)
+        public HttpResponseMessage Post([FromBody]MiniExcursionDao miniExcursion)
         {
-            miniExcursionDal.InsertMiniExcursion(miniExcursion);
+            if (ModelState.IsValid)
+            {
+
+                miniExcursionDal.InsertMiniExcursion(miniExcursion);
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+            }
         }
 
         // PUT: api/MiniExcursion/5
